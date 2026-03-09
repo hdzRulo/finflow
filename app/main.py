@@ -33,7 +33,7 @@ def dashboard_page() -> None:
     render_dashboard()
 
 
-@ui.page("/transactions")
+@ui.page("/transactions-ui")
 def transactions_page() -> None:
     render_transactions_page()
 
@@ -46,3 +46,6 @@ def import_page() -> None:
 @ui.page("/import-history")
 def history_page() -> None:
     render_import_history_page()
+
+
+ui.run_with(app, storage_secret="finflow-dev-secret")

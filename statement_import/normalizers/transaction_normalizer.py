@@ -15,15 +15,16 @@ class TransactionNormalizer:
         self.description_normalizer = DescriptionNormalizer()
 
     def normalize(self, record: dict, file_path: str) -> dict:
+        tx_type = record.get("transaction_type", "expense")
         normalized = {
             "account_id": record.get("account_id"),
             "statement_id": record.get("statement_id", 0),
             "transaction_date": self.date_normalizer.normalize(record.get("transaction_date")),
             "posting_date": self.date_normalizer.normalize(record.get("posting_date")),
             "description": self.description_normalizer.normalize(record.get("description")),
-            "amount": self.amount_normalizer.normalize(record.get("amount", 0)),
+            "amount": self.amount_normalizer.normalize(record.get("amount", 0), tx_type),
             "currency": record.get("currency", "USD"),
-            "transaction_type": record.get("transaction_type", "expense"),
+            "transaction_type": tx_type,
             "balance": record.get("balance"),
             "category_id": record.get("category_id"),
             "merchant": record.get("merchant"),

@@ -7,11 +7,11 @@ def build_fingerprint(record: dict) -> str:
     """Create deterministic hash from canonical transaction fields."""
     key = "|".join(
         [
+            str(record.get("account_id", "")),
             str(record.get("transaction_date", "")),
             str(record.get("amount", "")),
             str(record.get("currency", "")),
             str(record.get("description", "")).strip().lower(),
-            str(record.get("reference_number", "")),
         ]
     )
     return sha256(key.encode("utf-8")).hexdigest()

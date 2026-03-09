@@ -1,4 +1,4 @@
-"""Text extractor implementation placeholder."""
+"""Text extractor implementation."""
 
 from statement_import.extractors.base_extractor import BaseExtractor
 

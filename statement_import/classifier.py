@@ -2,6 +2,9 @@
 
 from abc import ABC, abstractmethod
 
+from statement_import.matchers.bank_detector import BankDetector
+from statement_import.matchers.layout_detector import LayoutDetector
+
 
 class BaseClassifier(ABC):
     """Classifies statement metadata for parser routing."""
@@ -12,12 +15,15 @@ class BaseClassifier(ABC):
 
 
 class HeuristicClassifier(BaseClassifier):
-    """Simple keyword-based classifier placeholder."""
+    """Keyword and layout based classifier."""
+
+    def __init__(self) -> None:
+        self.bank_detector = BankDetector()
+        self.layout_detector = LayoutDetector()
 
     def classify(self, extracted_payload: dict) -> dict:
-        text = (extracted_payload.get("text") or "").lower()
-        if "example bank a" in text:
-            return {"bank_name": "ExampleBankA", "layout_family": "table", "confidence": 0.9}
-        if "example bank b" in text:
-            return {"bank_name": "ExampleBankB", "layout_family": "line", "confidence": 0.9}
-        return {"bank_name": "unknown", "layout_family": "generic", "confidence": 0.2}
+        text = extracted_payload.get("text") or extracted_payload.get("ocr_text") or ""
+        bank = self.bank_detector.detect(text)
+        layout = self.layout_detector.detect(extracted_payload)
+        confidence = 0.9 if bank != "unknown" else 0.4
+        return {"bank_name": bank, "layout_family": layout, "confidence": confidence}

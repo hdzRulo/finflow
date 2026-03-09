@@ -24,7 +24,7 @@ class CategoryRead(CategoryBase):
 
 class TransactionBase(BaseModel):
     account_id: int | None = None
-    statement_id: int
+    statement_id: int = 0
     transaction_date: date
     posting_date: date | None = None
     description: str
@@ -35,7 +35,7 @@ class TransactionBase(BaseModel):
     category_id: int | None = None
     merchant: str | None = None
     reference_number: str | None = None
-    source_file: str
+    source_file: str = "manual"
     raw_text: str | None = None
     fingerprint_hash: str
 
@@ -44,16 +44,25 @@ class TransactionCreate(TransactionBase):
     pass
 
 
+class TransactionUpdate(BaseModel):
+    transaction_date: date | None = None
+    posting_date: date | None = None
+    description: str | None = None
+    amount: Decimal | None = None
+    currency: str | None = None
+    transaction_type: str | None = None
+    balance: Decimal | None = None
+    category_id: int | None = None
+    merchant: str | None = None
+    reference_number: str | None = None
+    raw_text: str | None = None
+
+
 class TransactionRead(TransactionBase):
     id: int
     created_at: datetime
 
     model_config = {"from_attributes": True}
-
-
-class StatementImportCreate(BaseModel):
-    source_file: str
-    bank_name: str | None = None
 
 
 class StatementImportRead(BaseModel):

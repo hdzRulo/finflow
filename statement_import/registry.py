@@ -24,7 +24,12 @@ class ParserRegistry:
         self._parsers.append(parser_cls)
 
     def create_parser(self, classification: dict) -> BaseStatementParser:
-        for parser_cls in self._parsers:
-            if parser_cls.can_parse(classification):
-                return parser_cls()
+        confidence = classification.get("confidence", 0)
+        if confidence >= 0.8:
+            for parser_cls in self._parsers[:2]:
+                if parser_cls.can_parse(classification):
+                    return parser_cls()
+
+        if GenericTableParser.can_parse(classification):
+            return GenericTableParser()
         return GenericLineParser()

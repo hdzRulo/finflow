@@ -1,4 +1,4 @@
-"""Table extractor placeholder backed by pdfplumber/pandas."""
+"""Table extractor backed by upstream reader output."""
 
 from statement_import.extractors.base_extractor import BaseExtractor
 

@@ -11,5 +11,6 @@ class OCRExtractor(BaseExtractor):
         self.reader = OCRReader()
 
     def extract(self, payload: dict) -> dict:
-        payload.setdefault("ocr_text", "")
+        payload["ocr_text"] = self.reader.extract_text(b"")
+        payload.setdefault("warnings", []).append("OCR path is placeholder; configure OCR provider for scanned PDFs")
         return payload
